@@ -1,0 +1,10 @@
+__pycache__/
+
+libtest
+dev
+venv
+.cache
+.idea
+
+dist
+build
