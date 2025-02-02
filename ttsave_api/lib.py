@@ -1,4 +1,6 @@
 import os
+import ast
+import base64
 import requests
 from typing import Dict, Any, List
 from enum import Enum
@@ -100,7 +102,7 @@ class TTSave:
         except requests.exceptions.RequestException:
             return False
 
-    def download(self, url: str, content_type: ContentType, downloads_dir: str = './') -> Dict[str, dict | str, List[str]] | None:
+    def download(self, url: str, content_type: ContentType, downloads_dir: str = './') -> dict[str, dict | str | List[str]] | None:
         """
         Отправляет запрос на сервер для скачивания контента с TikTok.
 
@@ -123,10 +125,10 @@ class TTSave:
                     raise ServerError('Сервер недоступен')
             
             boundary = response.headers["Content-Type"].split("boundary=")[-1]
-            content_meta: dict = response.headers['Content-Meta']
+            meta = base64.b64decode(response.headers["Content-Meta"]).decode("utf-8")
             return {
                 'files': self._parse_multipart_stream(response, boundary, downloads_dir),
-                'meta': content_meta
+                'meta': ast.literal_eval(meta)
             }
         except KeyError:
             print("Ошибка: Не удалось найти boundary в заголовках ответа.")
