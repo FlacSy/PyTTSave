@@ -100,7 +100,7 @@ class TTSave:
         except requests.exceptions.RequestException:
             return False
 
-    def download(self, url: str, content_type: ContentType, downloads_dir: str = './') -> List[str] | None:
+    def download(self, url: str, content_type: ContentType, downloads_dir: str = './') -> Dict[str, dict | str, List[str]] | None:
         """
         Отправляет запрос на сервер для скачивания контента с TikTok.
 
@@ -123,7 +123,11 @@ class TTSave:
                     raise ServerError('Сервер недоступен')
             
             boundary = response.headers["Content-Type"].split("boundary=")[-1]
-            return self._parse_multipart_stream(response, boundary, downloads_dir)
+            content_meta: dict = response.headers['Content-Meta']
+            return {
+                'files': self._parse_multipart_stream(response, boundary, downloads_dir),
+                'meta': content_meta
+            }
         except KeyError:
             print("Ошибка: Не удалось найти boundary в заголовках ответа.")
         except Exception as e:
