@@ -10,7 +10,12 @@
 Установить PyTTSave можно с помощью pip:
 
 ```bash
-pip3 install PyTTSave==1.0.0
+pip3 install PyTTSave==1.1.0
+```
+
+Последнюю версию всегда можно скачать с GitHub, с помощью команды:
+```bash
+pip3 install git+https://github.com/FlacSy/PyTTSave
 ```
 
 ---
@@ -93,7 +98,7 @@ ping() -> bool
 ### `download()`
 
 ```python
-download(url: str, content_type: ContentType, downloads_dir: str = './') -> List[str] | None
+download(url: str, content_type: ContentType, downloads_dir: str = './') -> dict[str, dict | str | List[str]] | None
 ```
 
 **Описание:** Загружает контент с TikTok, используя API TTSave.
@@ -104,8 +109,8 @@ download(url: str, content_type: ContentType, downloads_dir: str = './') -> List
 - `downloads_dir` *(str, optional)* — Папка для сохранения загруженных файлов (по умолчанию текущая директория).
 
 **Возвращает:**
-- `List[str]` — Список сохранённых файлов.
-- `None`, если загрузка не удалась.
+- `dict[str, dict | str | List[str]]` — Словарь, состоящий из списка **files** и словаря **meta**.
+- `None` — При неудачной загрузке.
 
 **Исключения:**
 - `ServerError` — Ошибка при загрузке контента или недоступность сервера.
@@ -126,8 +131,8 @@ _send_request(data: Dict[str, Any], endpoint: str) -> requests.Response | None
 - `endpoint` *(str)* — Путь API (например, `download`).
 
 **Возвращает:**
-- `requests.Response`, если запрос успешен.
-- `None`, если произошла ошибка.
+- `requests.Response` —  При успешном запросе.
+- `None` —  При ошибке возвращается None.
 
 **Исключения:**
 - `requests.exceptions.RequestException` — Ошибка при отправке запроса.
